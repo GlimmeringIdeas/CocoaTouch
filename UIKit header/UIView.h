@@ -17,6 +17,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#pragma mark 枚举内容
+
 typedef NS_ENUM(NSInteger, UIViewAnimationCurve) {
     UIViewAnimationCurveEaseInOut,         // slow at beginning and end
     UIViewAnimationCurveEaseIn,            // slow at beginning
@@ -132,6 +134,9 @@ typedef NS_ENUM(NSInteger, UIUserInterfaceLayoutDirection) {
 - (CGRect)convertRect:(CGRect)rect toCoordinateSpace:(id <UICoordinateSpace>)coordinateSpace NS_AVAILABLE_IOS(8_0);
 - (CGRect)convertRect:(CGRect)rect fromCoordinateSpace:(id <UICoordinateSpace>)coordinateSpace NS_AVAILABLE_IOS(8_0);
 
+/**
+ *  <#Description#>
+ */
 @property (readonly, nonatomic) CGRect bounds NS_AVAILABLE_IOS(8_0);
 
 @end
@@ -140,15 +145,51 @@ typedef NS_ENUM(NSInteger, UIUserInterfaceLayoutDirection) {
 
 NS_CLASS_AVAILABLE_IOS(2_0) @interface UIView : UIResponder <NSCoding, UIAppearance, UIAppearanceContainer, UIDynamicItem, UITraitEnvironment, UICoordinateSpace, UIFocusEnvironment>
 
+/**
+ *  <#Description#>
+ *
+ *  @return <#return value description#>
+ */
 + (Class)layerClass;                        // default is [CALayer class]. Used when creating the underlying layer for the view.
 
+/**
+ *  <#Description#>
+ *
+ *  @param frame <#frame description#>
+ *
+ *  @return <#return value description#>
+ */
 - (instancetype)initWithFrame:(CGRect)frame NS_DESIGNATED_INITIALIZER;
+
+/**
+ *  <#Description#>
+ *
+ *  @param aDecoder <#aDecoder description#>
+ *
+ *  @return <#return value description#>
+ */
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
 
+/**
+ *  <#Description#>
+ */
 @property(nonatomic,getter=isUserInteractionEnabled) BOOL userInteractionEnabled;  // default is YES. if set to NO, user events (touch, keys) are ignored and removed from the event queue.
-@property(nonatomic)                                 NSInteger tag;                // default is 0
-@property(nonatomic,readonly,strong)                 CALayer  *layer;              // returns view's layer. Will always return a non-nil value. view is layer's delegate
 
+/**
+ *  <#Description#>
+ */
+@property(nonatomic) NSInteger tag; // default is 0
+
+/**
+ *  <#Description#>
+ */
+@property(nonatomic,readonly,strong) CALayer  *layer; // returns view's layer. Will always return a non-nil value. view is layer's delegate
+
+/**
+ *  <#Description#>
+ *
+ *  @return <#return value description#>
+ */
 - (BOOL)canBecomeFocused NS_AVAILABLE_IOS(9_0); // NO by default
 @property (readonly, nonatomic, getter=isFocused) BOOL focused NS_AVAILABLE_IOS(9_0);
 
@@ -192,32 +233,134 @@ NS_CLASS_AVAILABLE_IOS(2_0) @interface UIView : UIResponder <NSCoding, UIAppeara
 @property(nonatomic,readonly,copy) NSArray<__kindof UIView *> *subviews;
 @property(nullable, nonatomic,readonly) UIWindow     *window;
 
+/**
+ *  从父控件中移除
+ */
 - (void)removeFromSuperview;
+
+/**
+ *  根据索引插入子view
+ *
+ *  @param view  <#view description#>
+ *  @param index <#index description#>
+ */
 - (void)insertSubview:(UIView *)view atIndex:(NSInteger)index;
+
+/**
+ *  <#Description#>
+ *
+ *  @param index1 <#index1 description#>
+ *  @param index2 <#index2 description#>
+ */
 - (void)exchangeSubviewAtIndex:(NSInteger)index1 withSubviewAtIndex:(NSInteger)index2;
 
+/**
+ *  <#Description#>
+ *
+ *  @param view <#view description#>
+ */
 - (void)addSubview:(UIView *)view;
+
+/**
+ *  <#Description#>
+ *
+ *  @param view           <#view description#>
+ *  @param siblingSubview <#siblingSubview description#>
+ */
 - (void)insertSubview:(UIView *)view belowSubview:(UIView *)siblingSubview;
+
+/**
+ *  <#Description#>
+ *
+ *  @param view           <#view description#>
+ *  @param siblingSubview <#siblingSubview description#>
+ */
 - (void)insertSubview:(UIView *)view aboveSubview:(UIView *)siblingSubview;
 
+/**
+ *  <#Description#>
+ *
+ *  @param view <#view description#>
+ */
 - (void)bringSubviewToFront:(UIView *)view;
+
+/**
+ *  <#Description#>
+ *
+ *  @param view <#view description#>
+ */
 - (void)sendSubviewToBack:(UIView *)view;
 
+/**
+ *  <#Description#>
+ *
+ *  @param subview <#subview description#>
+ */
 - (void)didAddSubview:(UIView *)subview;
+
+/**
+ *  <#Description#>
+ *
+ *  @param subview <#subview description#>
+ */
 - (void)willRemoveSubview:(UIView *)subview;
 
+/**
+ *  <#Description#>
+ *
+ *  @param newSuperview <#newSuperview description#>
+ */
 - (void)willMoveToSuperview:(nullable UIView *)newSuperview;
+
+/**
+ *  <#Description#>
+ */
 - (void)didMoveToSuperview;
+
+/**
+ *  <#Description#>
+ *
+ *  @param newWindow <#newWindow description#>
+ */
 - (void)willMoveToWindow:(nullable UIWindow *)newWindow;
+
+/**
+ *  <#Description#>
+ */
 - (void)didMoveToWindow;
 
+/**
+ *  <#Description#>
+ *
+ *  @param view <#view description#>
+ *
+ *  @return <#return value description#>
+ */
 - (BOOL)isDescendantOfView:(UIView *)view;  // returns YES for self.
+
+/**
+ *  <#Description#>
+ *
+ *  @param tag <#tag description#>
+ *
+ *  @return <#return value description#>
+ */
 - (nullable __kindof UIView *)viewWithTag:(NSInteger)tag; // recursive search. includes self
 
 // Allows you to perform layout before the drawing cycle happens. -layoutIfNeeded forces layout early
+/**
+ *  <#Description#>
+ */
 - (void)setNeedsLayout;
+
+/**
+ *  <#Description#>
+ */
 - (void)layoutIfNeeded;
 
+/**
+ *  <#Description#>
+ */
 - (void)layoutSubviews;    // override point. called by layoutIfNeeded automatically. As of iOS 6.0, when constraints-based layout is used the base implementation applies the constraints-based layout, otherwise it does nothing.
 
 /*
@@ -225,41 +368,110 @@ NS_CLASS_AVAILABLE_IOS(2_0) @interface UIView : UIResponder <NSCoding, UIAppeara
  If preservesSuperviewLayoutMargins is YES, margins cascade down the view tree, adjusting for geometry offsets, so that setting the left value of layoutMargins on a superview will affect the left value of layoutMargins for subviews positioned close to the left edge of their superview's bounds
  If your view subclass uses layoutMargins in its layout or drawing, override -layoutMarginsDidChange in order to refresh your view if the margins change.
  */
+
+/**
+ *  <#Description#>
+ */
 @property (nonatomic) UIEdgeInsets layoutMargins NS_AVAILABLE_IOS(8_0);
+
+/**
+ *  <#Description#>
+ */
 @property (nonatomic) BOOL preservesSuperviewLayoutMargins NS_AVAILABLE_IOS(8_0); // default is NO - set to enable pass-through or cascading behavior of margins from this view’s parent to its children
+
+/**
+ *  <#Description#>
+ */
 - (void)layoutMarginsDidChange NS_AVAILABLE_IOS(8_0);
 
 /* The edges of this guide are constrained to equal the edges of the view inset by the layoutMargins
  */
+/**
+ *  <#Description#>
+ */
 @property(readonly,strong) UILayoutGuide *layoutMarginsGuide NS_AVAILABLE_IOS(9_0);
 
 /// This content guide provides a layout area that you can use to place text and related content whose width should generally be constrained to a size that is easy for the user to read. This guide provides a centered region that you can place content within to get this behavior for this view.
+
+/**
+ *  <#Description#>
+ */
 @property (nonatomic, readonly, strong) UILayoutGuide *readableContentGuide  NS_AVAILABLE_IOS(9_0);
 @end
 
 @interface UIView(UIViewRendering)
 
+/**
+ *  <#Description#>
+ *
+ *  @param rect <#rect description#>
+ */
 - (void)drawRect:(CGRect)rect;
 
+/**
+ *  <#Description#>
+ */
 - (void)setNeedsDisplay;
+
+/**
+ *  <#Description#>
+ *
+ *  @param rect <#rect description#>
+ */
 - (void)setNeedsDisplayInRect:(CGRect)rect;
 
-@property(nonatomic)                 BOOL              clipsToBounds;              // When YES, content and subviews are clipped to the bounds of the view. Default is NO.
-@property(nullable, nonatomic,copy)            UIColor          *backgroundColor UI_APPEARANCE_SELECTOR; // default is nil. Can be useful with the appearance proxy on custom UIView subclasses.
-@property(nonatomic)                 CGFloat           alpha;                      // animatable. default is 1.0
-@property(nonatomic,getter=isOpaque) BOOL              opaque;                     // default is YES. opaque views must fill their entire bounds or the results are undefined. the active CGContext in drawRect: will not have been cleared and may have non-zeroed pixels
-@property(nonatomic)                 BOOL              clearsContextBeforeDrawing; // default is YES. ignored for opaque views. for non-opaque views causes the active CGContext in drawRect: to be pre-filled with transparent pixels
-@property(nonatomic,getter=isHidden) BOOL              hidden;                     // default is NO. doesn't check superviews
-@property(nonatomic)                 UIViewContentMode contentMode;                // default is UIViewContentModeScaleToFill
-@property(nonatomic)                 CGRect            contentStretch NS_DEPRECATED_IOS(3_0,6_0) __TVOS_PROHIBITED; // animatable. default is unit rectangle {{0,0} {1,1}}. Now deprecated: please use -[UIImage resizableImageWithCapInsets:] to achieve the same effect.
+/**
+ *  <#Description#>
+ */
+@property(nonatomic) BOOL clipsToBounds;              // When YES, content and subviews are clipped to the bounds of the view. Default is NO.
 
-@property(nullable, nonatomic,strong)          UIView           *maskView NS_AVAILABLE_IOS(8_0);
+/**
+ *  <#Description#>
+ */
+@property(nullable, nonatomic,copy) UIColor *backgroundColor UI_APPEARANCE_SELECTOR; // default is nil. Can be useful with the appearance proxy on custom UIView subclasses.
+
+/**
+ *  <#Description#>
+ */
+@property(nonatomic) CGFloat alpha;                      // animatable. default is 1.0
+
+/**
+ *  <#Description#>
+ */
+@property(nonatomic,getter=isOpaque) BOOL opaque;                     // default is YES. opaque views must fill their entire bounds or the results are undefined. the active CGContext in drawRect: will not have been cleared and may have non-zeroed pixels
+
+/**
+ *  <#Description#>
+ */
+@property(nonatomic) BOOL clearsContextBeforeDrawing; // default is YES. ignored for opaque views. for non-opaque views causes the active CGContext in drawRect: to be pre-filled with transparent pixels
+
+/**
+ *  <#Description#>
+ */
+@property(nonatomic,getter=isHidden) BOOL hidden;                     // default is NO. doesn't check superviews
+
+/**
+ *  <#Description#>
+ */
+@property(nonatomic) UIViewContentMode contentMode;                // default is UIViewContentModeScaleToFill
+
+/**
+ *  <#Description#>
+ */
+@property(nonatomic) CGRect contentStretch NS_DEPRECATED_IOS(3_0,6_0) __TVOS_PROHIBITED; // animatable. default is unit rectangle {{0,0} {1,1}}. Now deprecated: please use -[UIImage resizableImageWithCapInsets:] to achieve the same effect.
+/**
+ *  <#Description#>
+ */
+@property(nullable, nonatomic,strong) UIView *maskView NS_AVAILABLE_IOS(8_0);
 
 /*
  -tintColor always returns a color. The color returned is the first non-default value in the receiver's superview chain (starting with itself).
  If no non-default value is found, a system-defined color is returned.
  If this view's -tintAdjustmentMode returns Dimmed, then the color that is returned for -tintColor will automatically be dimmed.
  If your view subclass uses tintColor in its rendering, override -tintColorDidChange in order to refresh the rendering if the color changes.
+ */
+/**
+ *  <#Description#>
  */
 @property(null_resettable, nonatomic, strong) UIColor *tintColor NS_AVAILABLE_IOS(7_0);
 
@@ -269,10 +481,18 @@ NS_CLASS_AVAILABLE_IOS(2_0) @interface UIView : UIResponder <NSCoding, UIAppeara
  When tintAdjustmentMode has a value of UIViewTintAdjustmentModeDimmed for a view, the color it returns from tintColor will be modified to give a dimmed appearance.
  When the tintAdjustmentMode of a view changes (either the view's value changing or by one of its superview's values changing), -tintColorDidChange will be called to allow the view to refresh its rendering.
  */
+
+/**
+ *  <#Description#>
+ */
 @property(nonatomic) UIViewTintAdjustmentMode tintAdjustmentMode NS_AVAILABLE_IOS(7_0);
 
 /*
  The -tintColorDidChange message is sent to appropriate subviews of a view when its tintColor is changed by client code or to subviews in the view hierarchy of a view whose tintColor is implicitly changed when its superview or tintAdjustmentMode changes.
+ */
+
+/**
+ *  <#Description#>
  */
 - (void)tintColorDidChange NS_AVAILABLE_IOS(7_0);
 
@@ -280,47 +500,206 @@ NS_CLASS_AVAILABLE_IOS(2_0) @interface UIView : UIResponder <NSCoding, UIAppeara
 
 @interface UIView(UIViewAnimation)
 
+/**
+ *  <#Description#>
+ *
+ *  @param animationID <#animationID description#>
+ *  @param context     <#context description#>
+ */
 + (void)beginAnimations:(nullable NSString *)animationID context:(nullable void *)context;  // additional context info passed to will start/did stop selectors. begin/commit can be nested
+
+/**
+ *  <#Description#>
+ */
 + (void)commitAnimations;                                                 // starts up any animations when the top level animation is commited
 
 // no getters. if called outside animation block, these setters have no effect.
+/**
+ *  <#Description#>
+ *
+ *  @param delegate <#delegate description#>
+ */
 + (void)setAnimationDelegate:(nullable id)delegate;                          // default = nil
+
+/**
+ *  <#Description#>
+ *
+ *  @param selector <#selector description#>
+ */
 + (void)setAnimationWillStartSelector:(nullable SEL)selector;                // default = NULL. -animationWillStart:(NSString *)animationID context:(void *)context
+
+/**
+ *  <#Description#>
+ *
+ *  @param selector <#selector description#>
+ */
 + (void)setAnimationDidStopSelector:(nullable SEL)selector;                  // default = NULL. -animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context
+
+/**
+ *  <#Description#>
+ *
+ *  @param duration <#duration description#>
+ */
 + (void)setAnimationDuration:(NSTimeInterval)duration;              // default = 0.2
+
+/**
+ *  <#Description#>
+ *
+ *  @param delay <#delay description#>
+ */
 + (void)setAnimationDelay:(NSTimeInterval)delay;                    // default = 0.0
+
+/**
+ *  <#Description#>
+ *
+ *  @param startDate <#startDate description#>
+ */
 + (void)setAnimationStartDate:(NSDate *)startDate;                  // default = now ([NSDate date])
+
+/**
+ *  <#Description#>
+ *
+ *  @param curve <#curve description#>
+ */
 + (void)setAnimationCurve:(UIViewAnimationCurve)curve;              // default = UIViewAnimationCurveEaseInOut
+
+/**
+ *  <#Description#>
+ *
+ *  @param repeatCount <#repeatCount description#>
+ */
 + (void)setAnimationRepeatCount:(float)repeatCount;                 // default = 0.0.  May be fractional
+
+/**
+ *  <#Description#>
+ *
+ *  @param repeatAutoreverses <#repeatAutoreverses description#>
+ */
 + (void)setAnimationRepeatAutoreverses:(BOOL)repeatAutoreverses;    // default = NO. used if repeat count is non-zero
+
+/**
+ *  <#Description#>
+ *
+ *  @param fromCurrentState <#fromCurrentState description#>
+ */
 + (void)setAnimationBeginsFromCurrentState:(BOOL)fromCurrentState;  // default = NO. If YES, the current view position is always used for new animations -- allowing animations to "pile up" on each other. Otherwise, the last end state is used for the animation (the default).
 
+/**
+ *  <#Description#>
+ *
+ *  @param transition <#transition description#>
+ *  @param view       <#view description#>
+ *  @param cache      <#cache description#>
+ */
 + (void)setAnimationTransition:(UIViewAnimationTransition)transition forView:(UIView *)view cache:(BOOL)cache;  // current limitation - only one per begin/commit block
 
+/**
+ *  <#Description#>
+ *
+ *  @param enabled <#enabled description#>
+ */
 + (void)setAnimationsEnabled:(BOOL)enabled;                         // ignore any attribute changes while set.
+
+/**
+ *  <#Description#>
+ *
+ *  @return <#return value description#>
+ */
 + (BOOL)areAnimationsEnabled;
+
+/**
+ *  <#Description#>
+ *
+ *  @param actionsWithoutAnimation <#actionsWithoutAnimation description#>
+ */
 + (void)performWithoutAnimation:(void (^)(void))actionsWithoutAnimation NS_AVAILABLE_IOS(7_0);
 
+/**
+ *  <#Description#>
+ *
+ *  @return <#return value description#>
+ */
 + (NSTimeInterval)inheritedAnimationDuration NS_AVAILABLE_IOS(9_0);
 
 @end
 
 @interface UIView(UIViewAnimationWithBlocks)
 
+/**
+ *  <#Description#>
+ *
+ *  @param duration   <#duration description#>
+ *  @param delay      <#delay description#>
+ *  @param options    <#options description#>
+ *  @param animations <#animations description#>
+ *  @param completion <#completion description#>
+ */
 + (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^ __nullable)(BOOL finished))completion NS_AVAILABLE_IOS(4_0);
 
+
+/**
+ *  <#Description#>
+ *
+ *  @param duration   <#duration description#>
+ *  @param animations <#animations description#>
+ *  @param completion <#completion description#>
+ */
 + (void)animateWithDuration:(NSTimeInterval)duration animations:(void (^)(void))animations completion:(void (^ __nullable)(BOOL finished))completion NS_AVAILABLE_IOS(4_0); // delay = 0.0, options = 0
 
+/**
+ *  <#Description#>
+ *
+ *  @param duration   <#duration description#>
+ *  @param animations <#animations description#>
+ */
 + (void)animateWithDuration:(NSTimeInterval)duration animations:(void (^)(void))animations NS_AVAILABLE_IOS(4_0); // delay = 0.0, options = 0, completion = NULL
 
-/* Performs `animations` using a timing curve described by the motion of a spring. When `dampingRatio` is 1, the animation will smoothly decelerate to its final model values without oscillating. Damping ratios less than 1 will oscillate more and more before coming to a complete stop. You can use the initial spring velocity to specify how fast the object at the end of the simulated spring was moving before it was attached. It's a unit coordinate system, where 1 is defined as travelling the total animation distance in a second. So if you're changing an object's position by 200pt in this animation, and you want the animation to behave as if the object was moving at 100pt/s before the animation started, you'd pass 0.5. You'll typically want to pass 0 for the velocity. */ 
+/* Performs `animations` using a timing curve described by the motion of a spring. When `dampingRatio` is 1, the animation will smoothly decelerate to its final model values without oscillating. Damping ratios less than 1 will oscillate more and more before coming to a complete stop. You can use the initial spring velocity to specify how fast the object at the end of the simulated spring was moving before it was attached. It's a unit coordinate system, where 1 is defined as travelling the total animation distance in a second. So if you're changing an object's position by 200pt in this animation, and you want the animation to behave as if the object was moving at 100pt/s before the animation started, you'd pass 0.5. You'll typically want to pass 0 for the velocity. */
+/**
+ *  <#Description#>
+ *
+ *  @param duration     <#duration description#>
+ *  @param delay        <#delay description#>
+ *  @param dampingRatio <#dampingRatio description#>
+ *  @param velocity     <#velocity description#>
+ *  @param options      <#options description#>
+ *  @param animations   <#animations description#>
+ *  @param completion   <#completion description#>
+ */
 + (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay usingSpringWithDamping:(CGFloat)dampingRatio initialSpringVelocity:(CGFloat)velocity options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^ __nullable)(BOOL finished))completion NS_AVAILABLE_IOS(7_0);
 
+/**
+ *  <#Description#>
+ *
+ *  @param view       <#view description#>
+ *  @param duration   <#duration description#>
+ *  @param options    <#options description#>
+ *  @param animations <#animations description#>
+ *  @param completion <#completion description#>
+ */
 + (void)transitionWithView:(UIView *)view duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^ __nullable)(void))animations completion:(void (^ __nullable)(BOOL finished))completion NS_AVAILABLE_IOS(4_0);
 
+/**
+ *  <#Description#>
+ *
+ *  @param fromView   <#fromView description#>
+ *  @param toView     <#toView description#>
+ *  @param duration   <#duration description#>
+ *  @param options    <#options description#>
+ *  @param completion <#completion description#>
+ */
 + (void)transitionFromView:(UIView *)fromView toView:(UIView *)toView duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(void (^ __nullable)(BOOL finished))completion NS_AVAILABLE_IOS(4_0); // toView added to fromView.superview, fromView removed from its superview
 
 /* Performs the requested system-provided animation on one or more views. Specify addtional animations in the parallelAnimations block. These additional animations will run alongside the system animation with the same timing and duration that the system animation defines/inherits. Additional animations should not modify properties of the view on which the system animation is being performed. Not all system animations honor all available options.
+ */
+/**
+ *  <#Description#>
+ *
+ *  @param animation          <#animation description#>
+ *  @param views              <#views description#>
+ *  @param options            <#options description#>
+ *  @param parallelAnimations <#parallelAnimations description#>
+ *  @param completion         <#completion description#>
  */
 + (void)performSystemAnimation:(UISystemAnimation)animation onViews:(NSArray<__kindof UIView *> *)views options:(UIViewAnimationOptions)options animations:(void (^ __nullable)(void))parallelAnimations completion:(void (^ __nullable)(BOOL finished))completion NS_AVAILABLE_IOS(7_0);
 
@@ -328,7 +707,24 @@ NS_CLASS_AVAILABLE_IOS(2_0) @interface UIView : UIResponder <NSCoding, UIAppeara
 
 @interface UIView (UIViewKeyframeAnimations)
 
+/**
+ *  <#Description#>
+ *
+ *  @param duration   <#duration description#>
+ *  @param delay      <#delay description#>
+ *  @param options    <#options description#>
+ *  @param animations <#animations description#>
+ *  @param completion <#completion description#>
+ */
 + (void)animateKeyframesWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewKeyframeAnimationOptions)options animations:(void (^)(void))animations completion:(void (^ __nullable)(BOOL finished))completion NS_AVAILABLE_IOS(7_0);
+
+/**
+ *  <#Description#>
+ *
+ *  @param frameStartTime <#frameStartTime description#>
+ *  @param frameDuration  <#frameDuration description#>
+ *  @param animations     <#animations description#>
+ */
 + (void)addKeyframeWithRelativeStartTime:(double)frameStartTime relativeDuration:(double)frameDuration animations:(void (^)(void))animations NS_AVAILABLE_IOS(7_0); // start time and duration are values between 0.0 and 1.0 specifying time and duration relative to the overall time of the keyframe animation
 
 @end
