@@ -3,7 +3,7 @@
 //  UIKit
 //
 //  Copyright (c) 2005-2015 Apple Inc. All rights reserved.
-//
+//  http://www.cnblogs.com/pengyingh/articles/2379476.html
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIResponder.h>
@@ -129,9 +129,44 @@ typedef NS_ENUM(NSInteger, UIUserInterfaceLayoutDirection) {
 
 @protocol UICoordinateSpace <NSObject>
 
+/**
+ *  <#Description#>
+ *
+ *  @param point           <#point description#>
+ *  @param coordinateSpace <#coordinateSpace description#>
+ *
+ *  @return <#return value description#>
+ */
 - (CGPoint)convertPoint:(CGPoint)point toCoordinateSpace:(id <UICoordinateSpace>)coordinateSpace NS_AVAILABLE_IOS(8_0);
+
+/**
+ *  <#Description#>
+ *
+ *  @param point           <#point description#>
+ *  @param coordinateSpace <#coordinateSpace description#>
+ *
+ *  @return <#return value description#>
+ */
 - (CGPoint)convertPoint:(CGPoint)point fromCoordinateSpace:(id <UICoordinateSpace>)coordinateSpace NS_AVAILABLE_IOS(8_0);
+
+/**
+ *  <#Description#>
+ *
+ *  @param rect            <#rect description#>
+ *  @param coordinateSpace <#coordinateSpace description#>
+ *
+ *  @return <#return value description#>
+ */
 - (CGRect)convertRect:(CGRect)rect toCoordinateSpace:(id <UICoordinateSpace>)coordinateSpace NS_AVAILABLE_IOS(8_0);
+
+/**
+ *  <#Description#>
+ *
+ *  @param rect            <#rect description#>
+ *  @param coordinateSpace <#coordinateSpace description#>
+ *
+ *  @return <#return value description#>
+ */
 - (CGRect)convertRect:(CGRect)rect fromCoordinateSpace:(id <UICoordinateSpace>)coordinateSpace NS_AVAILABLE_IOS(8_0);
 
 /**
@@ -200,38 +235,102 @@ NS_CLASS_AVAILABLE_IOS(2_0) @interface UIView : UIResponder <NSCoding, UIAppeara
 @interface UIView(UIViewGeometry)
 
 // animatable. do not use frame if view is transformed since it will not correctly reflect the actual location of the view. use bounds + center instead.
-@property(nonatomic) CGRect            frame;
+@property(nonatomic) CGRect frame;
 
 // use bounds/center and not frame if non-identity transform. if bounds dimension is odd, center may be have fractional part
-@property(nonatomic) CGRect            bounds;      // default bounds is zero origin, frame size. animatable
-@property(nonatomic) CGPoint           center;      // center is center of frame. animatable
+@property(nonatomic) CGRect bounds;      // default bounds is zero origin, frame size. animatable
+@property(nonatomic) CGPoint center;      // center is center of frame. animatable
 @property(nonatomic) CGAffineTransform transform;   // default is CGAffineTransformIdentity. animatable
-@property(nonatomic) CGFloat           contentScaleFactor NS_AVAILABLE_IOS(4_0);
+@property(nonatomic) CGFloat contentScaleFactor NS_AVAILABLE_IOS(4_0);
 
 @property(nonatomic,getter=isMultipleTouchEnabled) BOOL multipleTouchEnabled __TVOS_PROHIBITED;   // default is NO
-@property(nonatomic,getter=isExclusiveTouch) BOOL       exclusiveTouch __TVOS_PROHIBITED;         // default is NO
+@property(nonatomic,getter=isExclusiveTouch) BOOL exclusiveTouch __TVOS_PROHIBITED;         // default is NO
 
 - (nullable UIView *)hitTest:(CGPoint)point withEvent:(nullable UIEvent *)event;   // recursively calls -pointInside:withEvent:. point is in the receiver's coordinate system
 - (BOOL)pointInside:(CGPoint)point withEvent:(nullable UIEvent *)event;   // default returns YES if point is in bounds
 
+/**
+ *  <#Description#>
+ *
+ *  @param point <#point description#>
+ *  @param view  <#view description#>
+ *
+ *  @return <#return value description#>
+ */
 - (CGPoint)convertPoint:(CGPoint)point toView:(nullable UIView *)view;
+
+/**
+ *  把一个点从一个坐标系转换到接收者的坐标系
+ *
+ *  @param point 一个视图中坐标系上的点
+ *  @param view  一个视图包含了点和他自身坐标系。如果是图是nil，那么这个方法将尝试转换基于窗口的坐标系。否则视图和那个接收者必须属于同一个UIWindow对象。
+ *
+ *  @return 一个转换到接收者坐标系的点
+ */
 - (CGPoint)convertPoint:(CGPoint)point fromView:(nullable UIView *)view;
+
+/**
+ *  <#Description#>
+ *
+ *  @param rect <#rect description#>
+ *  @param view <#view description#>
+ *
+ *  @return <#return value description#>
+ */
 - (CGRect)convertRect:(CGRect)rect toView:(nullable UIView *)view;
+
+/**
+ *  <#Description#>
+ *
+ *  @param rect <#rect description#>
+ *  @param view <#view description#>
+ *
+ *  @return <#return value description#>
+ */
 - (CGRect)convertRect:(CGRect)rect fromView:(nullable UIView *)view;
 
-@property(nonatomic) BOOL               autoresizesSubviews; // default is YES. if set, subviews are adjusted according to their autoresizingMask if self.bounds changes
+/**
+ *  <#Description#>
+ */
+@property(nonatomic) BOOL autoresizesSubviews; // default is YES. if set, subviews are adjusted according to their autoresizingMask if self.bounds changes
+
+/**
+ *  <#Description#>
+ */
 @property(nonatomic) UIViewAutoresizing autoresizingMask;    // simple resize. default is UIViewAutoresizingNone
 
+/**
+ *  <#Description#>
+ *
+ *  @param size <#size description#>
+ *
+ *  @return <#return value description#>
+ */
 - (CGSize)sizeThatFits:(CGSize)size;     // return 'best' size to fit given size. does not actually resize view. Default is return existing view size
+
+/**
+ *  <#Description#>
+ */
 - (void)sizeToFit;                       // calls sizeThatFits: with current view bounds and changes bounds size.
 
 @end
 
 @interface UIView(UIViewHierarchy)
 
-@property(nullable, nonatomic,readonly) UIView       *superview;
+/**
+ *  <#Description#>
+ */
+@property(nullable, nonatomic,readonly) UIView *superview;
+
+/**
+ *  <#Description#>
+ */
 @property(nonatomic,readonly,copy) NSArray<__kindof UIView *> *subviews;
-@property(nullable, nonatomic,readonly) UIWindow     *window;
+
+/**
+ *  <#Description#>
+ */
+@property(nullable, nonatomic,readonly) UIWindow *window;
 
 /**
  *  从父控件中移除
@@ -255,9 +354,9 @@ NS_CLASS_AVAILABLE_IOS(2_0) @interface UIView : UIResponder <NSCoding, UIAppeara
 - (void)exchangeSubviewAtIndex:(NSInteger)index1 withSubviewAtIndex:(NSInteger)index2;
 
 /**
- *  <#Description#>
+ *  添加一个子视图到接收者并让它在最上面显示出来。
  *
- *  @param view <#view description#>
+ *  @param view 需要添加的视图
  */
 - (void)addSubview:(UIView *)view;
 
@@ -278,9 +377,9 @@ NS_CLASS_AVAILABLE_IOS(2_0) @interface UIView : UIResponder <NSCoding, UIAppeara
 - (void)insertSubview:(UIView *)view aboveSubview:(UIView *)siblingSubview;
 
 /**
- *  <#Description#>
+ *  把指定的子视图移动到顶层
  *
- *  @param view <#view description#>
+ *  @param view 需要移到顶层的视图
  */
 - (void)bringSubviewToFront:(UIView *)view;
 
@@ -423,7 +522,7 @@ NS_CLASS_AVAILABLE_IOS(2_0) @interface UIView : UIResponder <NSCoding, UIAppeara
 /**
  *  <#Description#>
  */
-@property(nonatomic) BOOL clipsToBounds;              // When YES, content and subviews are clipped to the bounds of the view. Default is NO.
+@property(nonatomic) BOOL clipsToBounds; // When YES, content and subviews are clipped to the bounds of the view. Default is NO.
 
 /**
  *  <#Description#>
@@ -433,12 +532,12 @@ NS_CLASS_AVAILABLE_IOS(2_0) @interface UIView : UIResponder <NSCoding, UIAppeara
 /**
  *  <#Description#>
  */
-@property(nonatomic) CGFloat alpha;                      // animatable. default is 1.0
+@property(nonatomic) CGFloat alpha; // animatable. default is 1.0
 
 /**
  *  <#Description#>
  */
-@property(nonatomic,getter=isOpaque) BOOL opaque;                     // default is YES. opaque views must fill their entire bounds or the results are undefined. the active CGContext in drawRect: will not have been cleared and may have non-zeroed pixels
+@property(nonatomic,getter=isOpaque) BOOL opaque; // default is YES. opaque views must fill their entire bounds or the results are undefined. the active CGContext in drawRect: will not have been cleared and may have non-zeroed pixels
 
 /**
  *  <#Description#>
@@ -448,12 +547,12 @@ NS_CLASS_AVAILABLE_IOS(2_0) @interface UIView : UIResponder <NSCoding, UIAppeara
 /**
  *  <#Description#>
  */
-@property(nonatomic,getter=isHidden) BOOL hidden;                     // default is NO. doesn't check superviews
+@property(nonatomic,getter=isHidden) BOOL hidden; // default is NO. doesn't check superviews
 
 /**
  *  <#Description#>
  */
-@property(nonatomic) UIViewContentMode contentMode;                // default is UIViewContentModeScaleToFill
+@property(nonatomic) UIViewContentMode contentMode; // default is UIViewContentModeScaleToFill
 
 /**
  *  <#Description#>
@@ -733,12 +832,31 @@ NS_CLASS_AVAILABLE_IOS(2_0) @interface UIView : UIResponder <NSCoding, UIAppeara
 
 @property(nullable, nonatomic,copy) NSArray<__kindof UIGestureRecognizer *> *gestureRecognizers NS_AVAILABLE_IOS(3_2);
 
+/**
+ *  <#Description#>
+ *
+ *  @param gestureRecognizer <#gestureRecognizer description#>
+ */
 - (void)addGestureRecognizer:(UIGestureRecognizer*)gestureRecognizer NS_AVAILABLE_IOS(3_2);
+
+/**
+ *  <#Description#>
+ *
+ *  @param gestureRecognizer <#gestureRecognizer description#>
+ */
 - (void)removeGestureRecognizer:(UIGestureRecognizer*)gestureRecognizer NS_AVAILABLE_IOS(3_2);
 
 // called when the recognizer attempts to transition out of UIGestureRecognizerStatePossible if a touch hit-tested to this view will be cancelled as a result of gesture recognition
 // returns YES by default. return NO to cause the gesture recognizer to transition to UIGestureRecognizerStateFailed
 // subclasses may override to prevent recognition of particular gestures. for example, UISlider prevents swipes parallel to the slider that start in the thumb
+
+/**
+ *  <#Description#>
+ *
+ *  @param gestureRecognizer <#gestureRecognizer description#>
+ *
+ *  @return <#return value description#>
+ */
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer NS_AVAILABLE_IOS(6_0);
 
 @end
@@ -750,10 +868,20 @@ NS_CLASS_AVAILABLE_IOS(2_0) @interface UIView : UIResponder <NSCoding, UIAppeara
  
     Animates the transition to the motion effect's values using the present UIView animation
     context. */
+/**
+*  <#Description#>
+*
+*  @param effect <#effect description#>
+*/
 - (void)addMotionEffect:(UIMotionEffect *)effect NS_AVAILABLE_IOS(7_0);
 
 /*! Stops applying `effect` to the receiver. Any affected presentation values will animate to
     their post-removal values using the present UIView animation context. */
+/**
+ *  <#Description#>
+ *
+ *  @param effect <#effect description#>
+ */
 - (void)removeMotionEffect:(UIMotionEffect *)effect NS_AVAILABLE_IOS(7_0);
 
 @property (copy, nonatomic) NSArray<__kindof UIMotionEffect *> *motionEffects NS_AVAILABLE_IOS(7_0);
@@ -779,9 +907,32 @@ typedef NS_ENUM(NSInteger, UILayoutConstraintAxis) {
 
 @property(nonatomic,readonly) NSArray<__kindof NSLayoutConstraint *> *constraints NS_AVAILABLE_IOS(6_0);
 
+/**
+ *  <#Description#>
+ *
+ *  @param constraint <#constraint description#>
+ */
 - (void)addConstraint:(NSLayoutConstraint *)constraint NS_AVAILABLE_IOS(6_0); // This method will be deprecated in a future release and should be avoided.  Instead, set NSLayoutConstraint's active property to YES.
+
+/**
+ *  <#Description#>
+ *
+ *  @param constraints <#constraints description#>
+ */
 - (void)addConstraints:(NSArray<__kindof NSLayoutConstraint *> *)constraints NS_AVAILABLE_IOS(6_0); // This method will be deprecated in a future release and should be avoided.  Instead use +[NSLayoutConstraint activateConstraints:].
+
+/**
+ *  <#Description#>
+ *
+ *  @param constraint <#constraint description#>
+ */
 - (void)removeConstraint:(NSLayoutConstraint *)constraint NS_AVAILABLE_IOS(6_0); // This method will be deprecated in a future release and should be avoided.  Instead set NSLayoutConstraint's active property to NO.
+
+/**
+ *  <#Description#>
+ *
+ *  @param constraints <#constraints description#>
+ */
 - (void)removeConstraints:(NSArray<__kindof NSLayoutConstraint *> *)constraints NS_AVAILABLE_IOS(6_0); // This method will be deprecated in a future release and should be avoided.  Instead use +[NSLayoutConstraint deactivateConstraints:].
 @end
 
@@ -796,10 +947,28 @@ typedef NS_ENUM(NSInteger, UILayoutConstraintAxis) {
  Please see the conceptual documentation for a discussion of these methods.
  */
 
-@interface UIView (UIConstraintBasedLayoutCoreMethods) 
+@interface UIView (UIConstraintBasedLayoutCoreMethods)
+
+/**
+ *  <#Description#>
+ */
 - (void)updateConstraintsIfNeeded NS_AVAILABLE_IOS(6_0); // Updates the constraints from the bottom up for the view hierarchy rooted at the receiver. UIWindow's implementation creates a layout engine if necessary first.
+
+/**
+ *  <#Description#>
+ */
 - (void)updateConstraints NS_AVAILABLE_IOS(6_0); // Override this to adjust your special constraints during a constraints update pass
+
+/**
+ *  <#Description#>
+ *
+ *  @return <#return value description#>
+ */
 - (BOOL)needsUpdateConstraints NS_AVAILABLE_IOS(6_0);
+
+/**
+ *  <#Description#>
+ */
 - (void)setNeedsUpdateConstraints NS_AVAILABLE_IOS(6_0);
 @end
 
@@ -813,9 +982,17 @@ typedef NS_ENUM(NSInteger, UILayoutConstraintAxis) {
  When you elect to position the view using auto layout by adding your own constraints, 
  you must set this property to NO. IB will do this for you.
  */
+/**
+*  <#Description#>
+*/
 @property(nonatomic) BOOL translatesAutoresizingMaskIntoConstraints NS_AVAILABLE_IOS(6_0); // Default YES
 
 /* constraint-based layout engages lazily when someone tries to use it (e.g., adds a constraint to a view).  If you do all of your constraint set up in -updateConstraints, you might never even receive updateConstraints if no one makes a constraint.  To fix this chicken and egg problem, override this method to return YES if your view needs the window to use constraint-based layout.  
+ */
+/**
+ *  <#Description#>
+ *
+ *  @return <#return value description#>
  */
 + (BOOL)requiresConstraintBasedLayout NS_AVAILABLE_IOS(6_0);
 
@@ -834,13 +1011,38 @@ typedef NS_ENUM(NSInteger, UILayoutConstraintAxis) {
  A view that displayed an image with some ornament would typically override these, because the ornamental part of an image would scale up with the size of the frame.  
  Set the NSUserDefault UIViewShowAlignmentRects to YES to see alignment rects drawn.
  */
+/**
+*  <#Description#>
+*
+*  @param frame <#frame description#>
+*
+*  @return <#return value description#>
+*/
 - (CGRect)alignmentRectForFrame:(CGRect)frame NS_AVAILABLE_IOS(6_0);
+
+/**
+ *  <#Description#>
+ *
+ *  @param alignmentRect <#alignmentRect description#>
+ *
+ *  @return <#return value description#>
+ */
 - (CGRect)frameForAlignmentRect:(CGRect)alignmentRect NS_AVAILABLE_IOS(6_0);
 
 /* override this if the alignment rect is obtained from the frame by insetting each edge by a fixed amount.  This is only called by alignmentRectForFrame: and frameForAlignmentRect:.
  */
+/**
+ *  <#Description#>
+ *
+ *  @return <#return value description#>
+ */
 - (UIEdgeInsets)alignmentRectInsets NS_AVAILABLE_IOS(6_0);
 
+/**
+ *  <#Description#>
+ *
+ *  @return <#return value description#>
+ */
 - (UIView *)viewForBaselineLayout NS_DEPRECATED_IOS(6_0, 9_0, "Override -viewForFirstBaselineLayout or -viewForLastBaselineLayout as appropriate, instead") __TVOS_PROHIBITED;
 
 /* -viewForFirstBaselineLayout is called by the constraints system when interpreting
@@ -852,6 +1054,9 @@ typedef NS_ENUM(NSInteger, UILayoutConstraintAxis) {
  descendant is appropriate for both first- and last-baseline layout you may override
  just -viewForLastBaselineLayout.
  */
+/**
+ *  <#Description#>
+ */
 @property(readonly,strong) UIView *viewForFirstBaselineLayout NS_AVAILABLE_IOS(9_0);
 
 /* -viewForLastBaselineLayout is called by the constraints system when interpreting
@@ -860,6 +1065,9 @@ typedef NS_ENUM(NSInteger, UILayoutConstraintAxis) {
  (i.e., UILabel or non-scrollable UITextView) descendant of the receiver whose last baseline
  is appropriate for alignment.
     UIView's implementation returns self.
+ */
+/**
+ *  <#Description#>
  */
 @property(readonly,strong) UIView *viewForLastBaselineLayout NS_AVAILABLE_IOS(9_0);
 
@@ -879,26 +1087,96 @@ typedef NS_ENUM(NSInteger, UILayoutConstraintAxis) {
  Note that not all views have an intrinsicContentSize.  UIView's default implementation is to return (UIViewNoIntrinsicMetric, UIViewNoIntrinsicMetric).  The _intrinsic_ content size is concerned only with data that is in the view itself, not in other views. Remember that you can also set constant width or height constraints on any view, and you don't need to override instrinsicContentSize if these dimensions won't be changing with changing view content.
  */
 UIKIT_EXTERN const CGFloat UIViewNoIntrinsicMetric NS_AVAILABLE_IOS(6_0); // -1
+
+/**
+ *  <#Description#>
+ *
+ *  @return <#return value description#>
+ */
 - (CGSize)intrinsicContentSize NS_AVAILABLE_IOS(6_0);
+
+/**
+ *  <#Description#>
+ */
 - (void)invalidateIntrinsicContentSize NS_AVAILABLE_IOS(6_0); // call this when something changes that affects the intrinsicContentSize.  Otherwise UIKit won't notice that it changed.  
 
+/**
+ *  <#Description#>
+ *
+ *  @param axis <#axis description#>
+ *
+ *  @return <#return value description#>
+ */
 - (UILayoutPriority)contentHuggingPriorityForAxis:(UILayoutConstraintAxis)axis NS_AVAILABLE_IOS(6_0);
+
+/**
+ *  <#Description#>
+ *
+ *  @param priority <#priority description#>
+ *  @param axis     <#axis description#>
+ */
 - (void)setContentHuggingPriority:(UILayoutPriority)priority forAxis:(UILayoutConstraintAxis)axis NS_AVAILABLE_IOS(6_0);
 
+/**
+ *  <#Description#>
+ *
+ *  @param axis <#axis description#>
+ *
+ *  @return <#return value description#>
+ */
 - (UILayoutPriority)contentCompressionResistancePriorityForAxis:(UILayoutConstraintAxis)axis NS_AVAILABLE_IOS(6_0);
+
+/**
+ *  <#Description#>
+ *
+ *  @param priority <#priority description#>
+ *  @param axis     <#axis description#>
+ */
 - (void)setContentCompressionResistancePriority:(UILayoutPriority)priority forAxis:(UILayoutConstraintAxis)axis NS_AVAILABLE_IOS(6_0);
 @end
 
 // Size To Fit
 
+/**
+ *  <#Description#>
+ *
+ *  @param 6_0 <#6_0 description#>
+ *
+ *  @return <#return value description#>
+ */
 UIKIT_EXTERN const CGSize UILayoutFittingCompressedSize NS_AVAILABLE_IOS(6_0);
+
+/**
+ *  <#Description#>
+ *
+ *  @param 6_0 <#6_0 description#>
+ *
+ *  @return <#return value description#>
+ */
 UIKIT_EXTERN const CGSize UILayoutFittingExpandedSize NS_AVAILABLE_IOS(6_0);
 
 @interface UIView (UIConstraintBasedLayoutFittingSize)
 /* The size fitting most closely to targetSize in which the receiver's subtree can be laid out while optimally satisfying the constraints. If you want the smallest possible size, pass UILayoutFittingCompressedSize; for the largest possible size, pass UILayoutFittingExpandedSize.
  Also see the comment for UILayoutPriorityFittingSizeLevel.
  */
+/**
+*  <#Description#>
+*
+*  @param targetSize <#targetSize description#>
+*
+*  @return <#return value description#>
+*/
 - (CGSize)systemLayoutSizeFittingSize:(CGSize)targetSize NS_AVAILABLE_IOS(6_0); // Equivalent to sending -systemLayoutSizeFittingSize:withHorizontalFittingPriority:verticalFittingPriority: with UILayoutPriorityFittingSizeLevel for both priorities.
+
+/**
+ *  <#Description#>
+ *
+ *  @param targetSize                <#targetSize description#>
+ *  @param horizontalFittingPriority <#horizontalFittingPriority description#>
+ *  @param verticalFittingPriority   <#verticalFittingPriority description#>
+ *
+ *  @return <#return value description#>
+ */
 - (CGSize)systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority NS_AVAILABLE_IOS(8_0);
 @end
 
@@ -945,6 +1223,13 @@ UIKIT_EXTERN const CGSize UILayoutFittingExpandedSize NS_AVAILABLE_IOS(6_0);
 /* This returns a list of all the constraints that are affecting the current location of the receiver.  The constraints do not necessarily involve the receiver, they may affect the frame indirectly.
  Pass UILayoutConstraintAxisHorizontal for the constraints affecting [self center].x and CGRectGetWidth([self bounds]), and UILayoutConstraintAxisVertical for the constraints affecting[self center].y and CGRectGetHeight([self bounds]).
  */
+/**
+*  <#Description#>
+*
+*  @param axis <#axis description#>
+*
+*  @return <#return value description#>
+*/
 - (NSArray<__kindof NSLayoutConstraint *> *)constraintsAffectingLayoutForAxis:(UILayoutConstraintAxis)axis NS_AVAILABLE_IOS(6_0);
 
 /* If there aren't enough constraints in the system to uniquely determine layout, we say the layout is ambiguous.  For example, if the only constraint in the system was x = y + 100, then there are lots of different possible values for x and y.  This situation is not automatically detected by UIKit, due to performance considerations and details of the algorithm used for layout.  
@@ -952,13 +1237,38 @@ UIKIT_EXTERN const CGSize UILayoutFittingExpandedSize NS_AVAILABLE_IOS(6_0);
  -hasAmbiguousLayout runs a check for whether there is another center and bounds the receiver could have that could also satisfy the constraints.
  -exerciseAmbiguousLayout does more.  It randomly changes the view layout to a different valid layout.  Making the UI jump back and forth can be helpful for figuring out where you're missing a constraint.  
  */
+/**
+ *  <#Description#>
+ *
+ *  @return <#return value description#>
+ */
 - (BOOL)hasAmbiguousLayout NS_AVAILABLE_IOS(6_0);
+
+/**
+ *  <#Description#>
+ */
 - (void)exerciseAmbiguityInLayout NS_AVAILABLE_IOS(6_0); 
 @end
 
 @interface UIView (UIStateRestoration)
+
+/**
+ *  <#Description#>
+ */
 @property (nullable, nonatomic, copy) NSString *restorationIdentifier NS_AVAILABLE_IOS(6_0);
+
+/**
+ *  <#Description#>
+ *
+ *  @param coder <#coder description#>
+ */
 - (void) encodeRestorableStateWithCoder:(NSCoder *)coder NS_AVAILABLE_IOS(6_0);
+
+/**
+ *  <#Description#>
+ *
+ *  @param coder <#coder description#>
+ */
 - (void) decodeRestorableStateWithCoder:(NSCoder *)coder NS_AVAILABLE_IOS(6_0);
 @end
 
@@ -977,9 +1287,34 @@ UIKIT_EXTERN const CGSize UILayoutFittingExpandedSize NS_AVAILABLE_IOS(6_0);
 
 * Creating snapshots from existing snapshots (as a method to duplicate, crop or create a resizable variant) is supported. In cases where many snapshots are needed, creating a snapshot from a common superview and making subsequent snapshots from it can be more performant. Please keep in mind that if 'afterUpdates' is YES, the original snapshot is committed and any changes made to it, not the view originally snapshotted, will be included.
  */
+/**
+*  <#Description#>
+*
+*  @param afterUpdates <#afterUpdates description#>
+*
+*  @return <#return value description#>
+*/
 - (UIView *)snapshotViewAfterScreenUpdates:(BOOL)afterUpdates NS_AVAILABLE_IOS(7_0);
+
+/**
+ *  <#Description#>
+ *
+ *  @param rect         <#rect description#>
+ *  @param afterUpdates <#afterUpdates description#>
+ *  @param capInsets    <#capInsets description#>
+ *
+ *  @return <#return value description#>
+ */
 - (UIView *)resizableSnapshotViewFromRect:(CGRect)rect afterScreenUpdates:(BOOL)afterUpdates withCapInsets:(UIEdgeInsets)capInsets NS_AVAILABLE_IOS(7_0);  // Resizable snapshots will default to stretching the center
 // Use this method to render a snapshot of the view hierarchy into the current context. Returns NO if the snapshot is missing image data, YES if the snapshot is complete. Calling this method from layoutSubviews while the current transaction is committing will capture what is currently displayed regardless if afterUpdates is YES.
+/**
+ *  <#Description#>
+ *
+ *  @param rect         <#rect description#>
+ *  @param afterUpdates <#afterUpdates description#>
+ *
+ *  @return <#return value description#>
+ */
 - (BOOL)drawViewHierarchyInRect:(CGRect)rect afterScreenUpdates:(BOOL)afterUpdates NS_AVAILABLE_IOS(7_0);
 @end
 
